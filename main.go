@@ -26,8 +26,8 @@ func verify(param string) (string, error) {
 	}
 
 	s = strings.ToLower(param)
-	for i := range s {
-		if s[i] != 'b' && s[i] != 'g' && s[i] != 'r' {
+	for _, c := range s {
+		if c != 'b' && c != 'g' && c != 'r' {
 			return "", errors.New("Incorrect parameter. Use only 'r', 'g', 'b'.")
 		}
 	}
@@ -37,7 +37,9 @@ func verify(param string) (string, error) {
 func stones(s string) int {
 	var c int
 	for i := 1; i < len(s); i++ {
-		if s[i] == s[i-1] {c++}
+		if s[i] == s[i-1] {
+			c++
+		}
 	}
 	return c
 }
