@@ -3,70 +3,44 @@ package main
 import (
 	"errors"
 	"net/http"
-	"regexp"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 )
 
 var (
-	reN, reS *regexp.Regexp
 	incorErr error
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	param := r.URL.Query().Get("s")
 
-	m := make(map[string]string)
-	for k, v := range r.Form {
-		str := strings.Join(v, "")
-		m[k] = str
-	}
-
-	n, s, err := verify(m)
+	s, err := verify(param)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	ans := stones(n, s)
-	w.Write([]byte(strconv.FormatInt(int64(ans), 10)))
+	w.Write([]byte(strconv.FormatInt(int64(stones(s)), 10)))
 }
 
-func verify(m map[string]string) (int, string, error) {
+func verify(param string) (string, error) {
 	var s string
-	var n int
 
-	for k, v := range m {
-		switch k {
-		case "n":
-			if ok := reN.MatchString(v); ok {
-				tmp, err := strconv.Atoi(v)
-				if err != nil {
-					return 0, "", incorErr
-				}
-				n = tmp
-			}
-		case "s":
-			if ok := reS.MatchString(v); ok {
-				s = strings.ToUpper(v)
-			}
-		default:
-			return 0, "", incorErr
-		}
-	}
-
-	l := utf8.RuneCountInString(s)
-	if l == n {
-		return n, s, nil
+	if n := len(param); 1 > n || n > 50 {
+		return "", incorErr
 	} else {
-		return 0, "", incorErr
+		s = strings.ToLower(param)
+		for i := range s {
+			if s[i] != 98 && s[i] != 103 && s[i] != 114 {
+				return "", incorErr
+			}
+		}
+		return s, nil
 	}
 }
 
-func stones(n int, s string) int {
+func stones(s string) int {
 	var c int
-	for i := 1; i < n; i++ {
+	for i := 1; i < len(s); i++ {
 		if s[i] == s[i-1] {
 			c++
 		}
@@ -76,9 +50,6 @@ func stones(n int, s string) int {
 
 func main() {
 	incorErr = errors.New("Incorrect input data. Please, try again")
-
-	reN = regexp.MustCompile("[0-9]{1,2}")
-	reS = regexp.MustCompile("[RGBrgb]{1,50}")
 
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
