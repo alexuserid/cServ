@@ -2,13 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
-)
-
-var (
-	incorErr = errors.New("Incorrect input data. Please, try again")
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -19,31 +15,29 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	w.Write([]byte(strconv.FormatInt(int64(stones(s)), 10)))
+	fmt.Fprintf(w, "%d\n", stones(s))
 }
 
 func verify(param string) (string, error) {
 	var s string
 
-	if n := len(param); 1 > n || n > 50 {
-		return "", incorErr
-	} else {
-		s = strings.ToLower(param)
-		for i := range s {
-			if s[i] != 98 && s[i] != 103 && s[i] != 114 {
-				return "", incorErr
-			}
-		}
-		return s, nil
+	if n := len(param); n == 0 || n > 50 {
+		return "", errors.New("Incorrect parameter. Wrong size.")
 	}
+
+	s = strings.ToLower(param)
+	for i := range s {
+		if s[i] != 'b' && s[i] != 'g' && s[i] != 'r' {
+			return "", errors.New("Incorrect parameter. Use only 'r', 'g', 'b'.")
+		}
+	}
+	return s, nil
 }
 
 func stones(s string) int {
 	var c int
 	for i := 1; i < len(s); i++ {
-		if s[i] == s[i-1] {
-			c++
-		}
+		if s[i] == s[i-1] {c++}
 	}
 	return c
 }
