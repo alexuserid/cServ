@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	incorErr error
+	incorErr = errors.New("Incorrect input data. Please, try again")
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -49,8 +49,6 @@ func stones(s string) int {
 }
 
 func main() {
-	incorErr = errors.New("Incorrect input data. Please, try again")
-
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
 }
