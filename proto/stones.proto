@@ -11,5 +11,5 @@ message Reply {
 }
 
 service GetMovedStones {
-	rpc GetNum(Request) returns (Reply)
+	rpc GetNum(Request) returns (Reply);
 }
