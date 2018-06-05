@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stones;
+
+message Request {
+	string Colors;
+}
+
+message Reply {
+	int32 MovedStones;
+}
+
+service GetMovedStones {
+	rpc GetNum(Request) returns (Reply)
+}
