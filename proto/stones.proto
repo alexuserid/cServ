@@ -3,11 +3,11 @@ syntax = "proto3";
 package stones;
 
 message Request {
-	string Colors;
+	string Colors = 1;
 }
 
 message Reply {
-	int32 MovedStones;
+	int32 MovedStones = 1;
 }
 
 service GetMovedStones {
