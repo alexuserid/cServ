@@ -10,6 +10,6 @@ message Reply {
 	int32 moved_stones = 1;
 }
 
-service GetMovedStones {
+service Stones {
 	rpc GetNum(Request) returns (Reply);
 }

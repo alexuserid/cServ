@@ -7,6 +7,11 @@ import proto "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
@@ -29,7 +34,7 @@ func (m *Request) Reset()         { *m = Request{} }
 func (m *Request) String() string { return proto.CompactTextString(m) }
 func (*Request) ProtoMessage()    {}
 func (*Request) Descriptor() ([]byte, []int) {
-	return fileDescriptor_stones_547298fc9bde58d4, []int{0}
+	return fileDescriptor_stones_ab08d86da1d20efe, []int{0}
 }
 func (m *Request) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Request.Unmarshal(m, b)
@@ -67,7 +72,7 @@ func (m *Reply) Reset()         { *m = Reply{} }
 func (m *Reply) String() string { return proto.CompactTextString(m) }
 func (*Reply) ProtoMessage()    {}
 func (*Reply) Descriptor() ([]byte, []int) {
-	return fileDescriptor_stones_547298fc9bde58d4, []int{1}
+	return fileDescriptor_stones_ab08d86da1d20efe, []int{1}
 }
 func (m *Reply) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Reply.Unmarshal(m, b)
@@ -99,17 +104,89 @@ func init() {
 	proto.RegisterType((*Reply)(nil), "stones.Reply")
 }
 
-func init() { proto.RegisterFile("stones.proto", fileDescriptor_stones_547298fc9bde58d4) }
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
 
-var fileDescriptor_stones_547298fc9bde58d4 = []byte{
-	// 142 bytes of a gzipped FileDescriptorProto
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// StonesClient is the client API for Stones service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type StonesClient interface {
+	GetNum(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
+}
+
+type stonesClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewStonesClient(cc *grpc.ClientConn) StonesClient {
+	return &stonesClient{cc}
+}
+
+func (c *stonesClient) GetNum(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error) {
+	out := new(Reply)
+	err := c.cc.Invoke(ctx, "/stones.Stones/GetNum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StonesServer is the server API for Stones service.
+type StonesServer interface {
+	GetNum(context.Context, *Request) (*Reply, error)
+}
+
+func RegisterStonesServer(s *grpc.Server, srv StonesServer) {
+	s.RegisterService(&_Stones_serviceDesc, srv)
+}
+
+func _Stones_GetNum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StonesServer).GetNum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/stones.Stones/GetNum",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StonesServer).GetNum(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Stones_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "stones.Stones",
+	HandlerType: (*StonesServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetNum",
+			Handler:    _Stones_GetNum_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "stones.proto",
+}
+
+func init() { proto.RegisterFile("stones.proto", fileDescriptor_stones_ab08d86da1d20efe) }
+
+var fileDescriptor_stones_ab08d86da1d20efe = []byte{
+	// 137 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x2e, 0xc9, 0xcf,
 	0x4b, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x83, 0xf0, 0x94, 0x14, 0xb9, 0xd8,
 	0x83, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0xc4, 0xb8, 0xd8, 0x92, 0xf3, 0x73, 0xf2, 0x8b,
 	0x8a, 0x25, 0x18, 0x15, 0x18, 0x35, 0x38, 0x83, 0xa0, 0x3c, 0x25, 0x2d, 0x2e, 0xd6, 0xa0, 0xd4,
 	0x82, 0x9c, 0x4a, 0x21, 0x45, 0x2e, 0x9e, 0xdc, 0xfc, 0xb2, 0xd4, 0x94, 0x78, 0x88, 0x5e, 0xb0,
-	0x32, 0xd6, 0x20, 0x6e, 0xb0, 0x58, 0x30, 0x58, 0xc8, 0xc8, 0x8a, 0x8b, 0xcf, 0x3d, 0xb5, 0xc4,
-	0x17, 0x21, 0x22, 0xa4, 0xc1, 0xc5, 0xe6, 0x9e, 0x5a, 0xe2, 0x57, 0x9a, 0x2b, 0xc4, 0xaf, 0x07,
-	0x75, 0x01, 0xd4, 0x42, 0x29, 0x5e, 0x84, 0x40, 0x41, 0x4e, 0x65, 0x12, 0x1b, 0xd8, 0x65, 0xc6,
-	0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xca, 0xd7, 0xc8, 0x66, 0xa9, 0x00, 0x00, 0x00,
+	0x32, 0xd6, 0x20, 0x6e, 0xb0, 0x58, 0x30, 0x58, 0xc8, 0xc8, 0x88, 0x8b, 0x0d, 0xc2, 0x12, 0xd2,
+	0xe0, 0x62, 0x73, 0x4f, 0x2d, 0xf1, 0x2b, 0xcd, 0x15, 0xe2, 0xd7, 0x83, 0xda, 0x0c, 0xb5, 0x48,
+	0x8a, 0x17, 0x21, 0x50, 0x90, 0x53, 0x99, 0xc4, 0x06, 0x76, 0x91, 0x31, 0x20, 0x00, 0x00, 0xff,
+	0xff, 0xfa, 0x9b, 0xbc, 0x5d, 0xa1, 0x00, 0x00, 0x00,
 }
