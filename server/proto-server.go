@@ -7,7 +7,7 @@ import (
 	"net"
 	"strings"
 
-	pb "cServ/proto"
+	pb "github.com/alexuserid/cServ/proto"
 	"google.golang.org/grpc"
 )
 
