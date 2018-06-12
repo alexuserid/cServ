@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	pb "cServ/proto"
@@ -15,10 +16,13 @@ func main() {
 	}
 
 	c := pb.NewStonesClient(conn)
-	r, err := c.GetNum(context.Background(), &pb.Request{Colors: "RRRGG"})
+
+	var stones string
+	fmt.Scan(&stones)
+	r, err := c.GetNum(context.Background(), &pb.Request{Colors: stones})
 	if err != nil {
-		log.Fatalf("c.GetNum: %v", err)
+		log.Printf("c.GetNum: %v", err)
+		return
 	}
-	log.Print("Message sent")
-	log.Printf("Answer is: %v", r)
+	log.Printf("Stones to move: %v", r.MovedStones)
 }
